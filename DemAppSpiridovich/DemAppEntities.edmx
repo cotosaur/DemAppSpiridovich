@@ -1,0 +1,335 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Хранилище DemAppModel" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="pvz">
+          <Key>
+            <PropertyRef Name="index" />
+          </Key>
+          <Property Name="index" Type="int" Nullable="false" />
+          <Property Name="city" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="streat" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="home" Type="tinyint" />
+        </EntityType>
+        <EntityType Name="Tovar">
+          <Key>
+            <PropertyRef Name="Article" />
+          </Key>
+          <Property Name="Article" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Product_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Unit" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Price" Type="smallint" Nullable="false" />
+          <Property Name="Supplier" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Manufacturer" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Category" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Discount" Type="tinyint" Nullable="false" />
+          <Property Name="Quantity" Type="tinyint" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Photo" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="users">
+          <Key>
+            <PropertyRef Name="Login" />
+          </Key>
+          <Property Name="role" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="FIO" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Login" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "DemApp.dbo.zakaz" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="zakaz">
+          <Key>
+            <PropertyRef Name="Number" />
+            <PropertyRef Name="Article" />
+            <PropertyRef Name="Order_date" />
+            <PropertyRef Name="Delivery_date" />
+            <PropertyRef Name="Address" />
+            <PropertyRef Name="FIO_client" />
+            <PropertyRef Name="Code" />
+            <PropertyRef Name="Status" />
+          </Key>
+          <Property Name="Number" Type="tinyint" Nullable="false" />
+          <Property Name="Article" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Order_date" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Delivery_date" Type="date" Nullable="false" />
+          <Property Name="Address" Type="tinyint" Nullable="false" />
+          <Property Name="FIO_client" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Code" Type="smallint" Nullable="false" />
+          <Property Name="Status" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Login" Type="nvarchar" MaxLength="50" />
+          <Property Name="PvzIndex" Type="int" />
+        </EntityType>
+        <Association Name="FK_zakaz_pvz">
+          <End Role="pvz" Type="Self.pvz" Multiplicity="0..1" />
+          <End Role="zakaz" Type="Self.zakaz" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pvz">
+              <PropertyRef Name="index" />
+            </Principal>
+            <Dependent Role="zakaz">
+              <PropertyRef Name="PvzIndex" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_zakaz_Tovar">
+          <End Role="Tovar" Type="Self.Tovar" Multiplicity="1" />
+          <End Role="zakaz" Type="Self.zakaz" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tovar">
+              <PropertyRef Name="Article" />
+            </Principal>
+            <Dependent Role="zakaz">
+              <PropertyRef Name="Article" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_zakaz_users">
+          <End Role="users" Type="Self.users" Multiplicity="0..1" />
+          <End Role="zakaz" Type="Self.zakaz" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="Login" />
+            </Principal>
+            <Dependent Role="zakaz">
+              <PropertyRef Name="Login" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище DemAppModelContainer">
+          <EntitySet Name="pvz" EntityType="Self.pvz" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tovar" EntityType="Self.Tovar" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="zakaz" EntityType="Self.zakaz" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[zakaz].[Number] AS [Number], 
+[zakaz].[Article] AS [Article], 
+[zakaz].[Order_date] AS [Order_date], 
+[zakaz].[Delivery_date] AS [Delivery_date], 
+[zakaz].[Address] AS [Address], 
+[zakaz].[FIO_client] AS [FIO_client], 
+[zakaz].[Code] AS [Code], 
+[zakaz].[Status] AS [Status], 
+[zakaz].[Login] AS [Login], 
+[zakaz].[PvzIndex] AS [PvzIndex]
+FROM [dbo].[zakaz] AS [zakaz]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_zakaz_pvz" Association="Self.FK_zakaz_pvz">
+            <End Role="pvz" EntitySet="pvz" />
+            <End Role="zakaz" EntitySet="zakaz" />
+          </AssociationSet>
+          <AssociationSet Name="FK_zakaz_Tovar" Association="Self.FK_zakaz_Tovar">
+            <End Role="Tovar" EntitySet="Tovar" />
+            <End Role="zakaz" EntitySet="zakaz" />
+          </AssociationSet>
+          <AssociationSet Name="FK_zakaz_users" Association="Self.FK_zakaz_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="zakaz" EntitySet="zakaz" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DemAppModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="DemAppEntities" annotation:LazyLoadingEnabled="true" >
+          <EntitySet Name="pvz" EntityType="DemAppModel.pvz" />
+          <EntitySet Name="Tovar" EntityType="DemAppModel.Tovar" />
+          <EntitySet Name="users" EntityType="DemAppModel.users" />
+          <EntitySet Name="zakaz" EntityType="DemAppModel.zakaz" />
+          <AssociationSet Name="FK_zakaz_pvz" Association="DemAppModel.FK_zakaz_pvz">
+            <End Role="pvz" EntitySet="pvz" />
+            <End Role="zakaz" EntitySet="zakaz" />
+          </AssociationSet>
+          <AssociationSet Name="FK_zakaz_Tovar" Association="DemAppModel.FK_zakaz_Tovar">
+            <End Role="Tovar" EntitySet="Tovar" />
+            <End Role="zakaz" EntitySet="zakaz" />
+          </AssociationSet>
+          <AssociationSet Name="FK_zakaz_users" Association="DemAppModel.FK_zakaz_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="zakaz" EntitySet="zakaz" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="pvz">
+          <Key>
+            <PropertyRef Name="index" />
+          </Key>
+          <Property Name="index" Type="Int32" Nullable="false" />
+          <Property Name="city" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="streat" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="home" Type="Byte" />
+          <NavigationProperty Name="zakaz" Relationship="DemAppModel.FK_zakaz_pvz" FromRole="pvz" ToRole="zakaz" />
+        </EntityType>
+        <EntityType Name="Tovar">
+          <Key>
+            <PropertyRef Name="Article" />
+          </Key>
+          <Property Name="Article" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Product_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Unit" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Price" Type="Int16" Nullable="false" />
+          <Property Name="Supplier" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Manufacturer" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Category" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Discount" Type="Byte" Nullable="false" />
+          <Property Name="Quantity" Type="Byte" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Photo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="zakaz" Relationship="DemAppModel.FK_zakaz_Tovar" FromRole="Tovar" ToRole="zakaz" />
+        </EntityType>
+        <EntityType Name="users">
+          <Key>
+            <PropertyRef Name="Login" />
+          </Key>
+          <Property Name="role" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FIO" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Login" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="zakaz" Relationship="DemAppModel.FK_zakaz_users" FromRole="users" ToRole="zakaz" />
+        </EntityType>
+        <EntityType Name="zakaz">
+          <Key>
+            <PropertyRef Name="Number" />
+            <PropertyRef Name="Article" />
+            <PropertyRef Name="Order_date" />
+            <PropertyRef Name="Delivery_date" />
+            <PropertyRef Name="Address" />
+            <PropertyRef Name="FIO_client" />
+            <PropertyRef Name="Code" />
+            <PropertyRef Name="Status" />
+          </Key>
+          <Property Name="Number" Type="Byte" Nullable="false" />
+          <Property Name="Article" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Order_date" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Delivery_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Address" Type="Byte" Nullable="false" />
+          <Property Name="FIO_client" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Code" Type="Int16" Nullable="false" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Login" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PvzIndex" Type="Int32" />
+          <NavigationProperty Name="pvz" Relationship="DemAppModel.FK_zakaz_pvz" FromRole="zakaz" ToRole="pvz" />
+          <NavigationProperty Name="Tovar" Relationship="DemAppModel.FK_zakaz_Tovar" FromRole="zakaz" ToRole="Tovar" />
+          <NavigationProperty Name="users" Relationship="DemAppModel.FK_zakaz_users" FromRole="zakaz" ToRole="users" />
+        </EntityType>
+        <Association Name="FK_zakaz_pvz">
+          <End Type="DemAppModel.pvz" Role="pvz" Multiplicity="0..1" />
+          <End Type="DemAppModel.zakaz" Role="zakaz" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pvz">
+              <PropertyRef Name="index" />
+            </Principal>
+            <Dependent Role="zakaz">
+              <PropertyRef Name="PvzIndex" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_zakaz_Tovar">
+          <End Type="DemAppModel.Tovar" Role="Tovar" Multiplicity="1" />
+          <End Type="DemAppModel.zakaz" Role="zakaz" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tovar">
+              <PropertyRef Name="Article" />
+            </Principal>
+            <Dependent Role="zakaz">
+              <PropertyRef Name="Article" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_zakaz_users">
+          <End Type="DemAppModel.users" Role="users" Multiplicity="0..1" />
+          <End Type="DemAppModel.zakaz" Role="zakaz" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="Login" />
+            </Principal>
+            <Dependent Role="zakaz">
+              <PropertyRef Name="Login" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище DemAppModelContainer" CdmEntityContainer="DemAppEntities" >
+          <EntitySetMapping Name="pvz">
+            <EntityTypeMapping TypeName="DemAppModel.pvz">
+              <MappingFragment StoreEntitySet="pvz">
+                <ScalarProperty Name="home" ColumnName="home" />
+                <ScalarProperty Name="streat" ColumnName="streat" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="index" ColumnName="index" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tovar">
+            <EntityTypeMapping TypeName="DemAppModel.Tovar">
+              <MappingFragment StoreEntitySet="Tovar">
+                <ScalarProperty Name="Photo" ColumnName="Photo" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="Manufacturer" ColumnName="Manufacturer" />
+                <ScalarProperty Name="Supplier" ColumnName="Supplier" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="Product_name" ColumnName="Product_name" />
+                <ScalarProperty Name="Article" ColumnName="Article" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="users">
+            <EntityTypeMapping TypeName="DemAppModel.users">
+              <MappingFragment StoreEntitySet="users">
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="FIO" ColumnName="FIO" />
+                <ScalarProperty Name="role" ColumnName="role" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="zakaz">
+            <EntityTypeMapping TypeName="DemAppModel.zakaz">
+              <MappingFragment StoreEntitySet="zakaz">
+                <ScalarProperty Name="PvzIndex" ColumnName="PvzIndex" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="FIO_client" ColumnName="FIO_client" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Delivery_date" ColumnName="Delivery_date" />
+                <ScalarProperty Name="Order_date" ColumnName="Order_date" />
+                <ScalarProperty Name="Article" ColumnName="Article" />
+                <ScalarProperty Name="Number" ColumnName="Number" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,68 @@
+﻿<Window x:Class="DemAppSpiridovich.AdminWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ООО Обувь - Администратор" Height="600" Width="1200"
+        WindowStartupLocation="CenterScreen"
+        FontFamily="Times New Roman" Background="White"
+        Loaded="Window_Loaded">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Image Grid.Row="0" Source="/photo/Icon.png" Height="60" Stretch="Uniform" HorizontalAlignment="Left" Margin="0,0,0,10"/>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="1,0,-1,10">
+            <TextBox x:Name="tbSearch" Width="200" Height="30" Margin="0,0,5,0" VerticalContentAlignment="Center"/>
+            <Button Content="Поиск" Width="80" Height="30" Margin="0,0,5,0" Background="#00FA9A" BorderBrush="#00FA9A" Click="btSearch_Click"/>
+            <Button x:Name="btAdd" Content="Добавить" Width="90" Height="30" Margin="0,0,5,0" Background="#00FA9A" BorderBrush="#00FA9A" Click="btAdd_Click"/>
+            <Button x:Name="btEdit" Content="Редактировать" Width="110" Height="30" Margin="0,0,5,0" Background="#00FA9A" BorderBrush="#00FA9A" Click="btEdit_Click"/>
+            <Button x:Name="btDelete" Content="Удалить" Width="80" Height="30" Margin="0,0,5,0" Background="#00FA9A" BorderBrush="#00FA9A" Click="btDelete_Click"/>
+            <Button Content="Заказы" Width="100" Height="30"  Margin="0,0,5,0" Background="#7FFF00" BorderBrush="#7FFF00" Click="btnOrders_Click"/>
+            <Button Content="Товары" Width="100" Height="30" Background="#7FFF00" BorderBrush="#00FA9A" Click="btnProducts_Click"/>
+        </StackPanel>
+
+     
+        <DataGrid Grid.Row="2" x:Name="dgProducts" AutoGenerateColumns="True" IsReadOnly="True" 
+                  CanUserSortColumns="True" FontFamily="Times New Roman" RowHeight="30">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Фото" Width="80" SortMemberPath="Photo">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding Photo, StringFormat=/photo/{0}}" Width="50" Height="50" Stretch="Uniform"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Артикул" Binding="{Binding Article}" Width="80"/>
+                <DataGridTextColumn Header="Название" Binding="{Binding Product_name}" Width="150"/>
+                <DataGridTextColumn Header="Ед. изм." Binding="{Binding Unit}" Width="80"/>
+                <DataGridTextColumn Header="Цена" Binding="{Binding Price}" Width="80"/>
+                <DataGridTextColumn Header="Поставщик" Binding="{Binding Supplier}" Width="100"/>
+                <DataGridTextColumn Header="Производитель" Binding="{Binding Manufacturer}" Width="120"/>
+                <DataGridTextColumn Header="Категория" Binding="{Binding Category}" Width="100"/>
+                <DataGridTextColumn Header="Скидка" Binding="{Binding Discount}" Width="80"/>
+                <DataGridTextColumn Header="Кол-во" Binding="{Binding Quantity}" Width="70"/>
+                <DataGridTextColumn Header="Описание" Binding="{Binding Description}" Width="200"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+       
+        <DataGrid Grid.Row="2" x:Name="dgOrders" AutoGenerateColumns="False" IsReadOnly="True" 
+          FontFamily="Times New Roman" Visibility="Collapsed" RowHeight="30">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Номер" Binding="{Binding Номер}" Width="60"/>
+                <DataGridTextColumn Header="Артикулы" Binding="{Binding Артикулы}" Width="150"/>
+                <DataGridTextColumn Header="Товар" Binding="{Binding Товар}" Width="150"/>
+                <DataGridTextColumn Header="Дата заказа" Binding="{Binding Дата_заказа}" Width="100"/>
+                <DataGridTextColumn Header="Дата выдачи" Binding="{Binding Дата_выдачи}" Width="100"/>
+                <DataGridTextColumn Header="Клиент" Binding="{Binding Клиент}" Width="200"/>
+                <DataGridTextColumn Header="Адрес ПВЗ" Binding="{Binding Адрес_ПВЗ}" Width="200"/>
+                <DataGridTextColumn Header="Код" Binding="{Binding Код}" Width="80"/>
+                <DataGridTextColumn Header="Статус" Binding="{Binding Статус}" Width="100"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button x:Name="btUnlog" Content="Выйти " Margin="0,10,10,0" VerticalAlignment="Top" Height="25" HorizontalAlignment="Right" Width="73" Background="Chartreuse" Click="btUnlog_Click"/>
+    </Grid>
+</Window>
